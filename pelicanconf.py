@@ -12,7 +12,6 @@ DEFAULT_LANG = 'en'
 # Blogroll
 LINKS = (('R-bloggers', 'http://www.r-bloggers.com/'),
          ('My Experiments in Truth', 'http://izbicki.me/blog/'),
-         ('decomposition', 'http://seanjtaylor.com/'),
          ('mathbabe', 'http://mathbabe.org/'),
          )
 
