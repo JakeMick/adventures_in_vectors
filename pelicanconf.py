@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- #
 
 AUTHOR = u"Jacob Mick"
-SITENAME = u"data|Adventures"
+SITENAME = u"vector|Adventures"
 SITEURL = ''
 
 TIMEZONE = 'America/Chicago'
