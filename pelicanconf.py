@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
 
-AUTHOR = u"jakeMick"
-SITENAME = u"numpy|Thumper"
+AUTHOR = u"Jacob Mick"
+SITENAME = u"data|Adventures"
 SITEURL = ''
 
 TIMEZONE = 'America/Chicago'
