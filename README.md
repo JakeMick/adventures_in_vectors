@@ -1,4 +1,4 @@
 adventures_in_vectors
 =====================
 
-my blog
+my blog about data
