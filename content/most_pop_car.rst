@@ -44,3 +44,9 @@ Looking just at the trend it becomes apparent that the there is a massive
 We can zoom in on the trend for a given month. Right around the 10th there's
 a spike in sales. Followed by a slow decline to the low around the 25th. On
 average our customers sign their leases half-way between billing cycles.
+
+See? The chaos alluded to at the top of this post is cyclical for
+U.S. households. How likely you are to purchase a car depends on many factors,
+but these factors come in monthly trends.
+
+See you on the 10th. -- JakeMick
