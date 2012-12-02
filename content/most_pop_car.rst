@@ -2,6 +2,7 @@ Most popular days to shop for a car
 ###################################
 
 :tags: visualization, data, cars
+:date: 2012-12-02
 :category: cars 
 :author: Jake Mick
 
