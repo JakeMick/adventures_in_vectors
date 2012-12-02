@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- #
 
 AUTHOR = u"Jacob Mick"
-SITENAME = u"vector|Adventures"
+SITENAME = u"vector|adventures"
 SITEURL = 'jakemick.github.com'
 
 TIMEZONE = 'America/Chicago'
