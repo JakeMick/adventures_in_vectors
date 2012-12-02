@@ -43,7 +43,6 @@ html: clean $(OUTPUTDIR)/index.html
 $(OUTPUTDIR)/%.html:
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 	cp $(BASEDIR)/extra/* $(OUTPUTDIR)/
-	cp $(BASEDIR)/extra/* $(OUTPUTDIR)/static/
 
 clean:
 	find $(OUTPUTDIR) -mindepth 1 -delete
@@ -60,7 +59,6 @@ devserver:
 publish:
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(PUBLISHCONF) $(PELICANOPTS)
 	cp $(BASEDIR)/extra/* $(OUTPUTDIR)/
-	cp $(BASEDIR)/extra/* $(OUTPUTDIR)/static
 
 ssh_upload: publish
 	scp -P $(SSH_PORT) -r $(OUTPUTDIR)/* $(SSH_USER)@$(SSH_HOST):$(SSH_TARGET_DIR)
