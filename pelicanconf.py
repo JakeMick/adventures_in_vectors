@@ -3,7 +3,7 @@
 
 AUTHOR = u"Jacob Mick"
 SITENAME = u"vector|Adventures"
-SITEURL = ''
+SITEURL = 'jakemick.github.com'
 
 TIMEZONE = 'America/Chicago'
 
