@@ -1,25 +1,19 @@
-Review of Techical Blogging
-###########################
+Great Book on Blogging: Techical Blogging
+#########################################
 
 :tags: books, blogging, writing
 :date: 2012-12-02
 :category: books
 :author: Jake Mick
 
-**POST IN PROGRESS**
-
 I follow a bunch of technical reading circles and blogs. I read so much
-$LaTeX$ that I speak in $\\int$s. Sadly thought I haven't contributed much
-besides some Q/A on StackExchange and some technical subreddits.
+$LaTeX$ that I speak in $\\int$s. Sadly though, I haven't contributed much
+besides some Q/A on StackExchange and technical subreddits.
 
 2013 will the year that this changes. So I downloaded a copy of
 *Technical Blogging.* It has been a joy to read. The book is written in a style
-similar to the documentation surrounding a programming framework.
-
-The book starts off with a solid introduction establishing the purpose of blogging,
-"Blogging isn't dead, it is a ... Here's how this book fits in..."
-
-From the site:
+similar to the documentation surrounding a programming framework, which is really
+no surprise given what the publisher had to say:
     Technical Blogging is the first book to specifically teach programmers,
     technical people, and technically-oriented entrepreneurs how to become 
     successful bloggers. There is no magic to successful blogging; with this book 
@@ -33,13 +27,16 @@ writing a review of *Technical Blogging* on a technical blog.
 
 *Phew*. So let's get down to the d33ts.
 
-The chapters that follow are self-contained units implicitly forcing you to answer questions
-while concretizing the blog idea you have in mind. The author suggests writing down a plan of action
+The book starts off with a solid introduction establishing the purpose of blogging,
+"Blogging isn't dead, it is a ... Here's how this book fits in ..."
+
+The chapters that follow are self-contained units that encourage you to answer questions
+about the blog idea you have in mind. The author suggests writing down a plan of action
 as you parse the book.
 
-The chapters give you advice on WordPress then go on to
-give Dos-and-Donts about SEO, content creation, post consistency, reading Analytics,
-building a following, blog-growth and so on.
+The chapters give you advice on WordPress then go on to give Dos-and-Donts
+about SEO, content creation, post consistency, reading Analytics, building a
+following, blog-growth and so on.
 
 From the title I had expected a book focused on writing, but it is a small fraction
 of the book. The author agrees that content is the most important aspect of a blog
@@ -50,7 +47,8 @@ to come across a section on pay-scale for bloggers or job boards. It's like I'm
 reading something I shouldn't be allowed to see.
 
 *Techical Blogging: Turn Your Expertise into a Remarkable Online Presence
-by Antonio Cangiano* is offered by The Pragmatic Bookshelf at PragProg_.
+by Antonio Cangiano* is offered by The Pragmatic Bookshelf at PragProg_. I
+would definitely recommend the book to anyone interested in blogging.
 
 (BTW, reStructuredText looks sweet in Vim.)
 
