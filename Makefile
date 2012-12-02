@@ -75,6 +75,6 @@ ftp_upload: publish
 github: clean publish
 	rm -r ../jakemick.github.com/*
 	cp -r output/* ../jakemick.github.com/
-	cd ../jakemick.github.com/ && git add -A && git commit
+	cd ../jakemick.github.com/ && git add -A && git commit; git push origin master
 
 .PHONY: html help clean regenerate serve devserver publish ssh_upload rsync_upload dropbox_upload ftp_upload github
