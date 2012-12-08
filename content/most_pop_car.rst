@@ -6,6 +6,13 @@ Most popular days to shop for a car
 :category: cars 
 :author: Jake Mick
 
+###########
+DISCLAIMER:
+###########
+This data is fabricated. I wrote this to show off my writing and plotting skills.
+
+
+
 A car is a big purchase. Few of us buy one on an impulse. You decide that
 you're going to buy a car, you narrow it down to a few models and you're
 almost ready to pull the trigger when you get a massive salary bump.
