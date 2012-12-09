@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
+from pelican.plugins import html_rst_directive
 
 AUTHOR = u"Jacob Mick"
 SITENAME = u"vector|adventures"
@@ -21,3 +22,5 @@ SOCIAL = (('gitHub', 'http://github.com/JakeMick'),
           )
 
 DEFAULT_PAGINATION = 10
+
+PLUGINS = [html_rst_directive]
