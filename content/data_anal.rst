@@ -118,19 +118,21 @@ The code for those interested.
             decision_surface_plotter(X, Y, decision, support_indices, xind, yind)
             X = np.delete(X, support_indices, axis=0)
             Y = np.delete(Y, support_indices, axis=0)
-            if i == 1:
-                plt.show()
+        else:
+            plt.show()
 
 
     def decision_surface_plotter(X, Y, dec, support_indices, xind, yind):
-        plt.imshow(dec, interpolation='nearest', extent=(xind.min(), xind.max(), yind.min(), yind.max()), aspect='auto', origin='lower', cmap='PiYG')
+        plt.imshow(dec, interpolation='nearest',
+                   extent=(xind.min(), xind.max(), yind.min(), yind.max()),
+                   aspect='auto', origin='lower', cmap='PiYG')
         plt.contour(xind, yind, dec, levels=[0], linewidths=2, linetypes='--')
         keepers = np.setdiff1d(np.arange(X.shape[0]), support_indices)
-        plt.scatter(X[keepers, 0], X[keepers, 1], s=80, c=((Y[keepers] + .6) / 2),
+        plt.scatter(X[keepers, 0], X[keepers, 1], s=80, c=Y[keepers],
                     cmap='PiYG', marker='o', linewidths=1, alpha=.5,
                     label="Out of Margin")
         plt.scatter(X[support_indices, 0], X[support_indices, 1], s=80,
-                    c=(Y[support_indices] * .3 + .1), cmap='PRGn', marker='d',
+                    c=Y[support_indices], cmap='PRGn', marker='d',
                     linewidths=1, alpha=.4, label="Support Vectors")
         plt.axis([xind.min(), xind.max(), xind.min(), xind.max()])
         plt.legend(loc='best')

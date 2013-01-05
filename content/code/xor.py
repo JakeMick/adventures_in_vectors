@@ -56,12 +56,14 @@ def go_through():
         decision_surface_plotter(X, Y, decision, support_indices, xind, yind)
         X = np.delete(X, support_indices, axis=0)
         Y = np.delete(Y, support_indices, axis=0)
-        if i == 1:
-            plt.show()
+    else:
+        plt.show()
 
 
 def decision_surface_plotter(X, Y, dec, support_indices, xind, yind):
-    plt.imshow(dec, interpolation='nearest', extent=(xind.min(), xind.max(), yind.min(), yind.max()), aspect='auto', origin='lower', cmap='PiYG')
+    plt.imshow(dec, interpolation='nearest',
+               extent=(xind.min(), xind.max(), yind.min(), yind.max()),
+               aspect='auto', origin='lower', cmap='PiYG')
     plt.contour(xind, yind, dec, levels=[0], linewidths=2, linetypes='--')
     keepers = np.setdiff1d(np.arange(X.shape[0]), support_indices)
     plt.scatter(X[keepers, 0], X[keepers, 1], s=80, c=((Y[keepers] + .6) / 2),
