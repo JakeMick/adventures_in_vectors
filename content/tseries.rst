@@ -16,6 +16,20 @@ are gross domestic product, the stock price of Apple, electrical current through
 a resistor and Yosemite's Geyser eruptions. Less obviously, audio and text can
 be thought of as time series.
 
+
+#####################
+Why I'm writing this.
+#####################
+
+Recently I've been learning about time series modelling. A lot of literature
+exists on the subject, with varying formality and intended uses. As with some
+statistics literature, it is not clear how to apply a given concept to data.
+I've included code for this reason. This isn't algorithmic recipes. The
+intent of this document is to gift you with an intuition behind ideas. Basically
+this is a casual REPL-laden time series analysis text omitting a treatise on
+Hilbert space or memorization of algorithmic recipes.
+
+
 ####################
 Random Walk Part One
 ####################
@@ -24,17 +38,17 @@ Consider the eponymous coin-flip. $P(tails) = P(heads) = 1/2$. Suppose we kept
 a running tally of heads - tails, over 100,000 coin-flips. One such realization
 of the tally is below.
 
-.. image:: random_walk_bin.png
+.. image:: static/random_walk_bin.png
    :align: right
 
-More formally, the coin-flip is $X \sim Bin(1, 0.5)$ and the tally is
-$W_t = \sum\limits_{i=1}^t x_i$
+More formally, the coin-flip is $X \\sim Bin(1, 0.5)$ and the tally is
+$W_t = \\sum\\limits_{i=1}^t x_i$
 
 The underlying process is termed a **random walk**. It is the simplest example,
 as measured by the code golf needed to produce it. A random walk can come
-from any distributions. A realization of a random walk on $X \sim N(0, 1)$ is below.
+from any distributions. A realization of a random walk on $X \\sim N(0, 1)$ is below.
 
-.. image:: random_walk_norm.png
+.. image:: static/random_walk_norm.png
    :align: right
 
 In this introductory text we will only deal with Markov random walks, ones in which
@@ -78,9 +92,9 @@ The code used to produce the above plots is below.
 What is a Time Series?
 ######################
 Stepping back for a moment note that our walk $W$ is indexed by time point $t$.
-It is the case for all time series that $t \in T \subset R$. However, if
-$t \in T \not\subset R$ then other theory and models are needed. An interesting
-case outside the scope of this discussion arises when $t \in T \subset R^2$,
+It is the case for all time series that $t \\in T \\subset R$. However, if
+$t \\in T \\not\\subset R$ then other theory and models are needed. An interesting
+case outside the scope of this discussion arises when $t \\in T \\subset R^2$,
 which is useful for spatial analysis. Models of this class can be useful in
 predict house prices based on latitude and longitude. Spatial analysis is
 distinct from time series by the index vector, not the shape of the data. For
@@ -92,20 +106,20 @@ multivariate time series methods.
 Random Walk Part Two
 ####################
 Random walks are easily studied phenomena. Suppose we have a $W$ on $N(\mu, \sigma)$.
-$W_1 \sim N(\mu, \sigma)$ and $W_2 \sim N(\mu + \mu, \sigma + \sigma)$. In the case
-$\mu = 0, \sigma = 1$ we have $W_2 \sim N(0, 2\times\sigma)$. More generally
-$W_t \sim N(0, t\times\sigma)$.
+$W_1 \\sim N(\mu, \sigma)$ and $W_2 \\sim N(\mu + \mu, \sigma + \sigma)$. In the case
+$\mu = 0, \sigma = 1$ we have $W_2 \\sim N(0, 2)$. More generally, for any walk
+with a zero mean, $W_t \\sim N(0, t\\sigma)$.
 
 We can empiricize these results using the random number generator.
 
 Shown below are 50 realizations of a Gaussian walk, plotted with +/-2.5 sqrt(t)
 
-.. image:: random_walk_50.png
+.. image:: static/random_walk_50.png
    :align: right
 
 Shown below are boxplots of 1000 realizations of a 1001 step Gaussian walk
 
-.. image:: random_walk_boxplot.png
+.. image:: static/random_walk_boxplot.png
    :align: right
 
 The important realizations are that though the mean value of the walk is 0,
@@ -137,11 +151,11 @@ The code for the above plots is below.
 ############
 Differencing
 ############
-Define the backshift function $B(x_t) = x_t-1$. Define the difference function
-$\delta x_t = (1 - B) \times x_t = x_t - x_t-1$.
-$\delta^2 x_t = (1 - B)^2 x_t = x_t - 2 \times x_t-1 + x_t-2$
+Define the backshift function $B(x_t) = x_{t-1}$. Define the difference function
+$\\Delta x_t = (1 - B) x_t = x_t - x_{t-1}$. Repeated application follows
+the rules of polynomial expansion $\\Delta^2 x_t = (1 - B)^2 x_t = x_t - 2  x_{t-1} + x_{t-2}$
 
-In the case of our Gaussian random walk, applying $\delta$ to $W$ returns the
+In the case of our Gaussian random walk, applying $\\Delta$ to $W$ returns the
 series to the original values. In Python the following will print True.
 
 .. code-block:: python
@@ -152,8 +166,8 @@ series to the original values. In Python the following will print True.
 
 Though toyish in appearance, differencing is a fundamental preprocessing step
 for many applications of time series analysis. Suppose we defined a time series
-as $Q_t = Q_t-1 + \mu + \epsilon$, where $Q_0 = 0$, $\mu$ is constant and
-$epsilon \sim N(0, 1)$. By induction it can be shown that $\delta Q$ has a zero
+as $Q_t = Q_{t-1} + \mu + \epsilon$, where $Q_0 = 0$, $\mu$ is constant and
+$epsilon \\sim N(0, 1)$. By induction it can be shown that $\\Delta Q$ has a zero
 mean and a bounded variance. These properties, along with third property
 introduced in the following section simplify time series analysis.
 
@@ -177,6 +191,7 @@ A simple way to implement differencing in python is below.
             return t
 
 The following code prints True for any x of shape $(n,)$ for any power.
+
 .. code-block:: python
 
     x = np.cumsum(np.random.normal(0, 1, 100))
@@ -185,19 +200,19 @@ The following code prints True for any x of shape $(n,)$ for any power.
     undiff_diff_x = model.inv_transform(diff_x)
     print(np.allclose(undiff_diff_x, x))
 
-##############
-Autocovariance
-##############
+###############
+Autocorrelation
+###############
 
-Define the autocovariance function $\gamma(a) = Cov(X_a+t,X_t) = E[(X_a+t - EX_a+t)(X_t - EX_t)], a \in T \subset R$
+Define the autocovariance function $\\gamma(s, t) = \\frac{E[(X_t - EX_t)(X_s - EX_s)]}{\\sigma_t \\sigma_s}, s, t \\in T \\subset R$.
 
 Intuitively, we can think of the autocovariance function as mapping a univariate time
 series to the covariance between lags of the time series.
 
-If we normalize $\gamma(n) \div \gamma(0)$ we define the autocorrelation function.
+If we normalize $\\gamma(a) \\over \\gamma(0)$ we define the autocorrelation function.
 
 Importantly this function is invariant to translation of the time series. The
-autocorrelation functions of two realizations of the same random walk will be approximately
+autocorrelation functions of two realizations of the same model will be approximately
 the same.
 
 Several methods exist for the computation. Some are based on the FFT, while others

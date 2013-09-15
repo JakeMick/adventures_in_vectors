@@ -3,7 +3,7 @@
 
 AUTHOR = u"Jacob Mick"
 SITENAME = u"vector|adventures"
-SITEURL = 'jakemick.github.com'
+#SITEURL = 'jakemick.github.com'
 
 TIMEZONE = 'America/Chicago'
 
@@ -21,5 +21,7 @@ SOCIAL = (('gitHub', 'http://github.com/JakeMick'),
           )
 
 DEFAULT_PAGINATION = 10
+PLUGIN_PATH = '../pelican-plugins'
+PLUGINS = ['better_figures_and_images']
 
-#PLUGINS = [html_rst_directive]
+RESPONSIVE_IMAGES = True

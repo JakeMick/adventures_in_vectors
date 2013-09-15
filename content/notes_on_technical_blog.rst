@@ -53,7 +53,7 @@ would definitely recommend the book to anyone interested in blogging.
 
 (BTW, reStructuredText looks sweet in Vim.)
 
-.. image:: screenshot.png
+.. image:: static/screenshot.png
    :align: right
 
 -- JakeMick

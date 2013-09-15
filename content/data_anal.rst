@@ -34,22 +34,22 @@ would play Twister in front of my eyes. *I was definitely wrong.*
 This is by no means a formal proof, but repeatedly running it couldn't get the
 hyperplane to tilt.
 
-.. image:: one_svm_xor.png
+.. image:: static/one_svm_xor.png
    :align: right
 
 Most of the points are support vectors.
 
-.. image:: two_svm_xor.png
+.. image:: static/two_svm_xor.png
    :align: right
 
 
-.. image:: three_svm_xor.png
+.. image:: static/three_svm_xor.png
    :align: right
 
-.. image:: four_svm_xor.png
+.. image:: static/four_svm_xor.png
    :align: right
 
-.. image:: five_svm_xor.png
+.. image:: static/five_svm_xor.png
 
 Repeating this over and over with randomly generated XOR data didn't change it.
 Turns out that the soft margin is pretty robust to data censoring
