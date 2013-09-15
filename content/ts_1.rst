@@ -17,17 +17,19 @@ a resistor and Yosemite's Geyser eruptions. Less obviously, audio and text can
 be thought of as time series.
 
 
-#####################
-Why I'm writing this.
-#####################
+####################
+Why I'm writing this
+####################
 
 Recently I've been learning about time series modelling. A lot of literature
 exists on the subject, with varying formality and intended uses. As with some
 statistics literature, it is not clear how to apply a given concept to data.
 I've included code for this reason. This isn't algorithmic recipes. The
 intent of this document is to gift you with an intuition behind ideas. Basically
-this is a casual REPL-laden time series analysis text omitting a treatise on
-Hilbert space or memorization of algorithmic recipes.
+this is a casual time series analysis text. This document is not a treatise on
+Hilbert space. This document is not a collection of copy-paste recipes.
+
+This is the document I wish google gave me, you may hate it. $\\ddot\\smile$
 
 
 ####################
@@ -52,7 +54,7 @@ from any distributions. A realization of a random walk on $X \\sim N(0, 1)$ is b
    :align: right
 
 In this introductory text we will only deal with Markov random walks, ones in which
-$W_t$ depends only on $W_t-1$. This simplifies the analysis, but be aware that
+$W_t$ depends only on $W_{t-1}$. This simplifies the analysis, but be aware that
 the literature on random walks travels very far from this text. Other interesting
 properties can be imbued into a random walk that are outside the scope of this
 text.
@@ -105,14 +107,14 @@ multivariate time series methods.
 ####################
 Random Walk Part Two
 ####################
-Random walks are easily studied phenomena. Suppose we have a $W$ on $N(\mu, \sigma)$.
-$W_1 \\sim N(\mu, \sigma)$ and $W_2 \\sim N(\mu + \mu, \sigma + \sigma)$. In the case
-$\mu = 0, \sigma = 1$ we have $W_2 \\sim N(0, 2)$. More generally, for any walk
+Random walks are easily studied phenomena. Suppose we have a $W$ on $N(\\mu, \\sigma)$.
+$W_1 \\sim N(\\mu, \\sigma)$ and $W_2 \\sim N(\\mu + \\mu, \\sigma + \\sigma)$. In the case
+$\\mu = 0, \\sigma = 1$ we have $W_2 \\sim N(0, 2)$. More generally, for any walk
 with a zero mean, $W_t \\sim N(0, t\\sigma)$.
 
 We can empiricize these results using the random number generator.
 
-Shown below are 50 realizations of a Gaussian walk, plotted with +/-2.5 sqrt(t)
+Shown below are 50 realizations of a Gaussian walk, plotted with $\\pm 2.5 \\sqrt t$
 
 .. image:: static/random_walk_50.png
    :align: right
@@ -166,10 +168,14 @@ series to the original values. In Python the following will print True.
 
 Though toyish in appearance, differencing is a fundamental preprocessing step
 for many applications of time series analysis. Suppose we defined a time series
-as $Q_t = Q_{t-1} + \mu + \epsilon$, where $Q_0 = 0$, $\mu$ is constant and
-$epsilon \\sim N(0, 1)$. By induction it can be shown that $\\Delta Q$ has a zero
+as $Q_t = Q_{t-1} + \\mu + \\epsilon$, where $Q_0 = 0$, $\\mu$ is constant and
+$\\epsilon \\sim N(0, 1)$. By induction it can be shown that $\\Delta Q$ has a constant
 mean and a bounded variance. These properties, along with third property
 introduced in the following section simplify time series analysis.
+
+
+Shown below is the above model once differenced.
+
 
 A simple way to implement differencing in python is below.
 
@@ -178,19 +184,50 @@ A simple way to implement differencing in python is below.
     class difference:
         def __init__(self, power=1):
             self.power = power
+
         def fit_transform(self, x):
             self.data = x
             self.difference = self.data.copy()
             for i in xrange(self.power):
                 self.difference[1:] = self.difference[1:] - self.difference[:-1]
             return self.difference
-        def inv_transform(self, x):
-            t = x.copy()
-            for i in xrange(self.power):
-                t = np.cumsum(t)
-            return t
 
-The following code prints True for any x of shape $(n,)$ for any power.
+        def inv_transform(self, x):
+            for i in xrange(self.power):
+                x = np.cumsum(x)
+            return x
+
+The following code produces the above plot.
+
+.. code-block:: python
+
+    def differ_example():
+        # Generate time series model
+        np.random.seed(123)
+        l = 1000
+        const_drift = np.cumsum(np.array([1.0] * l))
+        rw = np.cumsum(np.random.normal(0, 5, l))
+        x = rw + const_drift
+        # Plot the time series
+        plt.subplot(2, 1, 1)
+        plt.plot(x, 'k')
+        plt.xlabel("Fixed time intervals")
+        plt.ylabel("Value")
+        plt.grid()
+        plt.title("Walk with constant drift")
+        # Plot the once differenced time series
+        plt.subplot(2, 1, 2)
+        model1 = difference(power=1)
+        res1 = model1.fit_transform(x)
+        plt.plot(res1, 'k')
+        plt.xlabel("Fixed time intervals")
+        plt.ylabel("Once Differenced Value")
+        plt.grid()
+        plt.title("Delta'd Walk")
+        plt.show()
+
+Ignoring numerical instabilities for higher powers, the following code prints
+True for any x of shape $(n,)$ for any power.
 
 .. code-block:: python
 
@@ -200,20 +237,30 @@ The following code prints True for any x of shape $(n,)$ for any power.
     undiff_diff_x = model.inv_transform(diff_x)
     print(np.allclose(undiff_diff_x, x))
 
+.. image:: static/differed_const_mean.png
+   :align: right
+
+.. image:: static/const_mean.png
+   :align: right
+
 ###############
 Autocorrelation
 ###############
 
-Define the autocovariance function $\\gamma(s, t) = \\frac{E[(X_t - EX_t)(X_s - EX_s)]}{\\sigma_t \\sigma_s}, s, t \\in T \\subset R$.
+Define the autocorrelation function
+$\\gamma(s, t) = \\frac{E[(X_t - EX_t)(X_s - EX_s)]}{\\sigma_t \\sigma_s}$
+where $ s, t \\in T \\subset R$.
 
-Intuitively, we can think of the autocovariance function as mapping a univariate time
-series to the covariance between lags of the time series.
+If we remove the variance divisor, we get the autocovariance function. However
+this change whacks up our interpretation, so we'll pretend it doesn't exist.
 
-If we normalize $\\gamma(a) \\over \\gamma(0)$ we define the autocorrelation function.
+Intuitively, we can think of the autocorrelation function as mapping a univariate time
+series to the correlation between lags of the time series.
 
-Importantly this function is invariant to translation of the time series. The
-autocorrelation functions of two realizations of the same model will be approximately
-the same.
+If $EX_t = EX_s = \\mu$ and $\\sigma_t = \\sigma_s = \\sigma$ then the above equation reduces to $\\gamma(s, t) = \\frac{E[(X_t - \\mu)(X_s - \\mu)]}{\\sigma^2}$.
+
+Importantly this function is invariant to left-right translation of the time series.
+It captures a deep truth about the observed signal.
 
 Several methods exist for the computation. Some are based on the FFT, while others
 are a simple loop.
@@ -222,14 +269,27 @@ Adapted from the Pandas library is the following function.
 
 .. code-block:: python
 
-    def autocorrelation(x):
+    def autocorrelation_slow(x):
         assert(len(x.shape) == 1)
-        mean = data.mean()
-        var = data.var()
+        mean = x.mean()
+        var = x.var()
         n = float(x.shape[0])
         def corr(lag):
             return ((x[:n - lag] - mean) * (x[lag:] - mean)).sum() / (n * var)
-        return map(corr, np.arange(1, n+1))
+        return map(corr, np.arange(1, n + 1))
+
+Adapted from the Statsmodels library is the following function.
+
+.. code-block:: python
+
+    def autocorrelation_fast(x):
+        assert(len(x.shape) == 1)
+        n = s[0]
+        x -= x.mean()
+        trans = np.fft.fft(x, n=n * 2)
+        acf = np.fft.ifft(trans * np.conjugate(trans))[:l]
+        acf /= acf[0]
+        return np.real(acf)
 
 .. code-block:: python
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- #
 
 AUTHOR = u"Jacob Mick"
 SITENAME = u"vector|adventures"
