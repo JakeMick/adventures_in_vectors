@@ -20,7 +20,7 @@ SOCIAL = (('gitHub', 'http://github.com/JakeMick'),
           )
 
 DEFAULT_PAGINATION = 10
-PLUGIN_PATH = '../pelican-plugins'
-PLUGINS = ['better_figures_and_images']
+#PLUGIN_PATH = '../pelican-plugins'
+#PLUGINS = ['better_figures_and_images']
 
-RESPONSIVE_IMAGES = True
+#RESPONSIVE_IMAGES = True
