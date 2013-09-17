@@ -87,6 +87,45 @@ def differ_example():
     plt.show()
 
 
+def autocorrelation_fast(x):
+    assert(len(x.shape) == 1)
+    n = x.shape[0]
+    x -= x.mean()
+    trans = np.fft.fft(x, n=n * 2)
+    acf = np.fft.ifft(trans * np.conjugate(trans))[:n]
+    acf /= acf[0]
+    return np.real(acf)
+
+
+def autocorr_example():
+    np.random.seed(3290)
+    x = np.linspace(0, 4 * np.pi, 1000)
+    y_trend = np.sin(x) + np.random.normal(0, 1, 1000)
+    y_notrend = np.random.normal(0, 10, 1000)
+    # No trend plotting
+    plt.subplot(2, 1, 1)
+    plt.plot(y_notrend, 'k')
+    plt.title("Data without trend")
+    plt.grid()
+    plt.subplot(2, 1, 2)
+    plt.ylim(-1, 1)
+    plt.plot(autocorrelation_fast(y_notrend), 'k')
+    plt.title("Autocorrelation Function of Data without trend")
+    plt.grid()
+    plt.show()
+    # Trend plotting
+    plt.subplot(2, 1, 1)
+    plt.plot(y_trend, 'k')
+    plt.title("Data with trend")
+    plt.grid()
+    plt.subplot(2, 1, 2)
+    plt.ylim(-1, 1)
+    plt.plot(autocorrelation_fast(y_trend), 'k')
+    plt.title("Autocorrelation Function of Data with trend")
+    plt.grid()
+    plt.show()
+
+
 def lagmat(tseries, lag=2):
     input_shape = tseries.shape
     assert(len(input_shape) == 1)
@@ -101,7 +140,8 @@ def main():
     #random_walk_bin()
     #random_walk_norm()
     #random_walk_dist()
-    differ_example()
+    #differ_example()
+    autocorr_example()
 
 if __name__ == '__main__':
     main()

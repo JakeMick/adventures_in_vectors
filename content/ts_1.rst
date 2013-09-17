@@ -104,6 +104,12 @@ example, if we have a collection of correlated walks, we would model them by
 multivariate time series methods.
 
 
+The examples used within this document are **stochastic processes**, which
+is a formal way of saying that the evolution of a time series is probabilistically
+determined. This contrasts the time evolution of a solution to a differential equation,
+in which our response is deterministic.
+
+
 ####################
 Random Walk Part Two
 ####################
@@ -173,8 +179,16 @@ $\\epsilon \\sim N(0, 1)$. By induction it can be shown that $\\Delta Q$ has a c
 mean and a bounded variance. These properties, along with third property
 introduced in the following section simplify time series analysis.
 
+Here is a realization of the above model.
 
-Shown below is the above model once differenced.
+.. image:: static/const_mean.png
+   :align: right
+
+Here is the same model once differenced.
+
+.. image:: static/differed_const_mean.png
+   :align: right
+
 
 
 A simple way to implement differencing in python is below.
@@ -237,27 +251,37 @@ True for any x of shape $(n,)$ for any power.
     undiff_diff_x = model.inv_transform(diff_x)
     print(np.allclose(undiff_diff_x, x))
 
-.. image:: static/differed_const_mean.png
-   :align: right
-
-.. image:: static/const_mean.png
-   :align: right
 
 ###############
 Autocorrelation
 ###############
 
+Intuitively, we can think of the autocorrelation function of a well-behaved
+time series as mapping a univariate time series to the correlation between
+lags of the time series.
+
 Define the autocorrelation function
-$\\gamma(s, t) = \\frac{E[(X_t - EX_t)(X_s - EX_s)]}{\\sigma_t \\sigma_s}$
-where $ s, t \\in T \\subset R$.
+$\\gamma(s, r) = \\frac{E[(X_s - EX_s)(X_r - EX_r)]}{\\sigma_s \\sigma_r}$
+where $ s, r \\in T \\subset R$.
+
+Well-behaved is precisely defined.
+
+If $EX_r = EX_s = \\mu$ and $\\sigma_r = \\sigma_s = \\sigma$ then the above
+equation reduces to $\\gamma(s, r) = \\frac{E[(x_s - \\mu)(x_r - \\mu)]}{\\sigma^2}$.
+
+This is equivalent to saying $\\gamma(s, r) = \\gamma(s-r, 0)$, which can be
+rewritten as $\\gamma(h) = \\frac{E[(x_t+h - \\mu)(x_t - \\mu)]}{\\sigma^2}$.
+
+In English this means that our autocorrelation function is dependent only on the lag.
+
+Where we might see 
 
 If we remove the variance divisor, we get the autocovariance function. However
-this change whacks up our interpretation, so we'll pretend it doesn't exist.
+this change whacks up our interpretation, so we'll pretend it doesn't exist. Some
+literature uses these terms interchangably, but technically the autocovariance
+function is unnormalized.
 
-Intuitively, we can think of the autocorrelation function as mapping a univariate time
-series to the correlation between lags of the time series.
 
-If $EX_t = EX_s = \\mu$ and $\\sigma_t = \\sigma_s = \\sigma$ then the above equation reduces to $\\gamma(s, t) = \\frac{E[(X_t - \\mu)(X_s - \\mu)]}{\\sigma^2}$.
 
 Importantly this function is invariant to left-right translation of the time series.
 It captures a deep truth about the observed signal.

@@ -142,7 +142,6 @@ aside, nav, article, figure {
 
 img{max-width:100% !important;
     height:auto;
-    padding-bottom:100%;
     display:block;}
 
 /***** Layout *****/
