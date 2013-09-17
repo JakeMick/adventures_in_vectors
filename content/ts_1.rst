@@ -270,7 +270,7 @@ If $EX_r = EX_s = \\mu$ and $\\sigma_r = \\sigma_s = \\sigma$ then the above
 equation reduces to $\\gamma(s, r) = \\frac{E[(x_s - \\mu)(x_r - \\mu)]}{\\sigma^2}$.
 
 This is equivalent to saying $\\gamma(s, r) = \\gamma(s-r, 0)$, which can be
-rewritten as $\\gamma(h) = \\frac{E[(x_t+h - \\mu)(x_t - \\mu)]}{\\sigma^2}$.
+rewritten as $\\gamma(h) = \\frac{E[(x_{t+h} - \\mu)(x_t - \\mu)]}{\\sigma^2}$.
 
 In English this means that our autocorrelation function is dependent only on the lag.
 
