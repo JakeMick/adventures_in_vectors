@@ -22,7 +22,8 @@ Why I'm writing this
 ####################
 
 Recently I've been learning about time series modelling. A lot of literature
-exists on the subject, with varying formality and intended uses. As with some
+exists on the subject, with varying formality and intended uses. This text
+will start off with time series as it relates to forecasting. With some
 statistics literature, it is not clear how to apply a given concept to data.
 I've included code for this reason. This isn't algorithmic recipes. The
 intent of this document is to gift you with an intuition behind ideas. Basically
@@ -94,8 +95,8 @@ The code used to produce the above plots is below.
 What is a Time Series?
 ######################
 Stepping back for a moment note that our walk $W$ is indexed by time point $t$.
-It is the case for all time series that $t \\in T \\subset R$. However, if
-$t \\in T \\not\\subset R$ then other theory and models are needed. An interesting
+It is the case for all time series that $t \\in T \\subset N$. However, if
+$t \\in T \\not\\subset N$ then other theory and models are needed. An interesting
 case outside the scope of this discussion arises when $t \\in T \\subset R^2$,
 which is useful for spatial analysis. Models of this class can be useful in
 predict house prices based on latitude and longitude. Spatial analysis is
@@ -132,7 +133,7 @@ Shown below are boxplots of 1000 realizations of a 1001 step Gaussian walk
 
 The important realizations are that though the mean value of the walk is 0,
 the variance is unbounded. An unbounded variance is an undesirable property
-in time series analysis. In the next section we'll learn how to recitify this
+in time series analysis. In the next section we'll learn how to rectify this
 behavior in the random walk case.
 
 The code for the above plots is below.
@@ -188,8 +189,6 @@ Here is the same model once differenced.
 
 .. image:: static/differed_const_mean.png
    :align: right
-
-
 
 A simple way to implement differencing in python is below.
 
@@ -262,29 +261,45 @@ lags of the time series.
 
 Define the autocorrelation function
 $\\gamma(s, r) = \\frac{E[(X_s - EX_s)(X_r - EX_r)]}{\\sigma_s \\sigma_r}$
-where $ s, r \\in T \\subset R$.
+where $ s, r \\in T \\subset N$.
 
 Well-behaved is precisely defined.
 
 If $EX_r = EX_s = \\mu$ and $\\sigma_r = \\sigma_s = \\sigma$ then the above
 equation reduces to $\\gamma(s, r) = \\frac{E[(x_s - \\mu)(x_r - \\mu)]}{\\sigma^2}$.
 
+Suppose that $\\gamma(s,r) = \\gamma(s+t,r+t)$.
+
 This is equivalent to saying $\\gamma(s, r) = \\gamma(s-r, 0)$, which can be
 rewritten as $\\gamma(h) = \\frac{E[(x_{t+h} - \\mu)(x_t - \\mu)]}{\\sigma^2}$.
 
 In English this means that our autocorrelation function is dependent only on the lag.
 
-Where we might see 
+Where we might see noise the autocorrelation function captures hidden structure.
 
-If we remove the variance divisor, we get the autocovariance function. However
-this change whacks up our interpretation, so we'll pretend it doesn't exist. Some
-literature uses these terms interchangably, but technically the autocovariance
-function is unnormalized.
+Consider the following sequence of random numbers.
 
+.. image:: static/autocorr_notrend.png
+   :align: right
 
+It has a pretty lame autocorrelation function.
 
-Importantly this function is invariant to left-right translation of the time series.
-It captures a deep truth about the observed signal.
+.. image:: static/autocorr_autocorr_notrend.png
+   :align: right
+
+Consider an autocorrelated sequence.
+
+.. image:: static/autocorr_trend.png
+   :align: right
+
+At face value, this sequence looks like the random numbers above. When we plot
+the autocorrelation function though, something interesting happens.
+
+.. image:: static/autocorr_autocorr_trend.png
+   :align: right
+
+Wow! Where we saw a useless plot, the autocorrelation function sees a pattern.
+Later on we'll exploit such patterns.
 
 Several methods exist for the computation. Some are based on the FFT, while others
 are a simple loop.
@@ -315,24 +330,88 @@ Adapted from the Statsmodels library is the following function.
         acf /= acf[0]
         return np.real(acf)
 
+You may be thinking, "oh shit, a fourier transform." Or you may be thinking
+"Oh shit! A fourier transform." So far, our analysis has been relegated to
+the time domain, but the frequency domain plays a central role to time series
+analysis. There's a lot of interesting math that arises in time series analysis.
+You'll have to read me prattle on for a bit before you see it. There's a
+fascinating relation between eigenvectors and the fourier transform.
+
+The code used to produce the plots in the above section.
+
 .. code-block:: python
 
-    import numpy as np
-    from matplotlib import pyplot as plt
+    def autocorr_example():
+        np.random.seed(123456)
+        # Make autocorrelated data
+        params = np.array([0.8, 0.5, -0.3])
+        x_auto = np.random.normal(0, 1, 3).tolist()
+        for _ in xrange(997):
+            x_auto.append(np.dot(x_auto[-3:], params) + np.random.normal(0, .5, 1)[0])
+        x_auto = np.array(x_auto)
+        auto_model = difference()
+        x_autodiff = auto_model.fit_transform(x_auto)
+        x_autodiff -= x_autodiff.mean()
+        x_autodiff /= x_autodiff.var()
+        # Make data that isn't autocorrelated
+        x_not = np.random.normal(0, 1, 1000)
+        not_auto_model = difference()
+        x_notdiff = not_auto_model.fit_transform(x_not)
+        x_notdiff -= x_notdiff.mean()
+        x_notdiff /= x_notdiff.var()
+        # Plot both series
+        plt.plot(x_autodiff, 'k')
+        plt.xlabel("Fixed time intervals")
+        plt.ylabel("Value")
+        plt.grid()
+        plt.title("Realization of Autocorrelated Function")
+        plt.show()
+        plt.plot(x_notdiff, 'k')
+        plt.xlabel("Fixed time intervals")
+        plt.ylabel("Value")
+        plt.grid()
+        plt.title("Realization of Random Values")
+        plt.show()
+        # Plot autocorrelation of both
+        plt.plot(autocorrelation_fast(x_autodiff), 'k')
+        plt.xlabel("Lag")
+        plt.ylabel("Autocorrelation probability")
+        plt.grid()
+        plt.title("Autocorrelation function of autocorrelated function")
+        plt.show()
+        plt.plot(autocorrelation_fast(x_notdiff), 'k')
+        plt.xlabel("Lag")
+        plt.ylabel("Autocorrelation probability")
+        plt.grid()
+        plt.title("Autocorrelation function of random values")
+        plt.show()
 
-    def lagmat(tseries, lag=2):
-        input_shape = tseries.shape
-        assert(len(input_shape) == 1)
-        n = input_shape[0]
-        values = np.concatenate((tseries[-1:0:-1], tseries))
-        a, b = np.ogrid[lag:n, n-1:n-lag-2:-1]
-        Tminus = values[a+b]
-        return Tminus[:,0], Tminus[:,1:]
 
-    def main():
-        go_through()
+############
+Stationarity
+############
 
-    if __name__ == '__main__':
-        main()
+Stationarity is the set of assumptions required for classic time series models.
+
+(i)
+    $E|X_t|^2 < \\infty, \\quad \\forall t \\in N$
+(ii)
+    $EX_t = \\mu, \\quad \\forall t \\in N$
+(iii)
+    $\\gamma(s, r) = \\gamma(s + t, r + t), \\quad \\forall r,s,t \\in N$
+
+In English
+
+(i)
+    The time series doesn't blow up.
+(ii)
+    The time series has no drift.
+(iii)
+    The correlation between values is dependent only on the lag between them.
+
+These assumptions are known as second-order stationarity, or weak stationarity.
+You can often achieve stationarity by (repeated) differencing of your time
+series.
+
 
 -- JakeMick

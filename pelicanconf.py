@@ -18,7 +18,11 @@ LINKS = (('R-bloggers', 'http://www.r-bloggers.com/'),
 SOCIAL = (('gitHub', 'http://github.com/JakeMick'),
           ('linkedIn', 'http://www.linkedin.com/pub/jacob-mick/53/2b2/b38'),
           )
-
+# Google Analytics
+GOOGLE_ANALYTICS = 'UA-44148111-1'
+# Disqus comments
+DISQUS_SITENAME = 'adventuresinvectors'
+# derpy derp
 DEFAULT_PAGINATION = 10
 #PLUGIN_PATH = '../pelican-plugins'
 #PLUGINS = ['better_figures_and_images']
