@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#/usr/bin/env python
 
 AUTHOR = u"Jacob Mick"
 SITENAME = u"vector|adventures"
@@ -23,8 +23,8 @@ GOOGLE_ANALYTICS = 'UA-44148111-1'
 # Disqus comments
 DISQUS_SITENAME = 'adventuresinvectors'
 # derpy derp
-DEFAULT_PAGINATION = 10
-#PLUGIN_PATH = '../pelican-plugins'
-#PLUGINS = ['better_figures_and_images']
-
-#RESPONSIVE_IMAGES = True
+DEFAULT_PAGINATION = False
+# Tag cloud
+TAG_CLOUD_STEPS = 4
+# Short summary
+SUMMARY_MAX_LENGTH = 50
