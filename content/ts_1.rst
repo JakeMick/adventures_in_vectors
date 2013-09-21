@@ -1,5 +1,5 @@
-Time Series: Part 1. An Introduction
-####################################
+Time Series: Part 1. An Introduction to Stationarity
+####################################################
 
 :tags: time-series, data, python
 :date: 2013-09-08
@@ -32,6 +32,24 @@ Hilbert space. This document is not a collection of copy-paste recipes.
 
 This is the document I wish google gave me, you may hate it. $\\ddot\\smile$
 
+#######
+Outline
+#######
+
+(i)
+    An Introduction to Stationarity.
+(ii)
+    AR, ARMA, ARIMA.
+(iii)
+    Forecast time series anyway.
+(iv)
+    Multivariate time series.
+(v)
+    Classification time series.
+(vi)
+    Frequency domain.
+(vii)
+    Toeplitz and Circulant Matrices.
 
 ####################
 Random Walk Part One
@@ -95,9 +113,9 @@ The code used to produce the above plots is below.
 What is a Time Series?
 ######################
 Stepping back for a moment note that our walk $W$ is indexed by time point $t$.
-It is the case for all time series that $t \\in T \\subset N$. However, if
-$t \\in T \\not\\subset N$ then other theory and models are needed. An interesting
-case outside the scope of this discussion arises when $t \\in T \\subset R^2$,
+It is the case for all time series that $t \\in T \\subset \\mathbb N$. However, if
+$t \\in T \\not\\subset \\mathbb N$ then other theory and models are needed. An interesting
+case outside the scope of this discussion arises when $t \\in T \\subset \\mathbb R^2$,
 which is useful for spatial analysis. Models of this class can be useful in
 predict house prices based on latitude and longitude. Spatial analysis is
 distinct from time series by the index vector, not the shape of the data. For
@@ -261,7 +279,7 @@ lags of the time series.
 
 Define the autocorrelation function
 $\\gamma(s, r) = \\frac{E[(X_s - EX_s)(X_r - EX_r)]}{\\sigma_s \\sigma_r}$
-where $ s, r \\in T \\subset N$.
+where $ s, r \\in T \\subset \\mathbb N$.
 
 Well-behaved is precisely defined.
 
@@ -334,8 +352,7 @@ You may be thinking, "oh shit, a fourier transform." Or you may be thinking
 "Oh shit! A fourier transform." So far, our analysis has been relegated to
 the time domain, but the frequency domain plays a central role to time series
 analysis. There's a lot of interesting math that arises in time series analysis.
-You'll have to read me prattle on for a bit before you see it. There's a
-fascinating relation between eigenvectors and the fourier transform.
+You'll have to read me prattle on for a bit before you see it.
 
 The code used to produce the plots in the above section.
 
@@ -394,11 +411,11 @@ Stationarity
 Stationarity is the set of assumptions required for classic time series models.
 
 (i)
-    $E|X_t|^2 < \\infty, \\quad \\forall t \\in N$
+    $E|X_t|^2 < \\infty, \\quad \\forall t \\in \\mathbb N$
 (ii)
-    $EX_t = \\mu, \\quad \\forall t \\in N$
+    $EX_t = \\mu, \\quad \\forall t \\in \\mathbb N$
 (iii)
-    $\\gamma(s, r) = \\gamma(s + t, r + t), \\quad \\forall r,s,t \\in N$
+    $\\gamma(s, r) = \\gamma(s + t, r + t), \\quad \\forall r,s,t \\in \\mathbb N$
 
 In English
 
