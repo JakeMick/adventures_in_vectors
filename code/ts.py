@@ -120,7 +120,7 @@ def autocorr_example():
     # Plot autocorrelation of both
     plt.plot(autocorrelation_fast(x_auto), 'k')
     plt.xlabel("Lag")
-    plt.ylabel("Autocorrelation Probability")
+    plt.ylabel("Correlation")
     plt.grid()
     plt.xlim(-1, 40)
     plt.ylim(-1.1, 1.1)
@@ -128,7 +128,7 @@ def autocorr_example():
     plt.show()
     plt.plot(autocorrelation_fast(x_not), 'k')
     plt.xlabel("Lag")
-    plt.ylabel("Autocorrelation Probability")
+    plt.ylabel("Correlation")
     plt.grid()
     plt.xlim(-1, 40)
     plt.ylim(-1.1, 1.1)

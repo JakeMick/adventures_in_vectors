@@ -11,7 +11,8 @@ Time Series Revisted
 ####################
 This is a continuation of a tour of time series as it relates to forecasting.
 In PartOne_ we went on to studied stationarity with pretty plots and a random
-number generator.
+number generator. Given knowledge of stationarity we can derive a linear
+model of time series for forecasting.
 
 
 ####################
@@ -29,6 +30,16 @@ Autoregressive-Moving Average
 ########################################
 Autoregressive-Integrated-Moving Average
 ########################################
+
+############################
+Akaike Information Criterion
+############################
+
+#################
+Condition Numbers
+#################
+
+
 
 ###########
 Box Jenkins

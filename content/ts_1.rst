@@ -132,10 +132,10 @@ in which our response is deterministic.
 ####################
 Random Walk Part Two
 ####################
-Random walks are easily studied phenomena. Suppose we have a $W$ on $N(\\mu, \\sigma)$.
-$W_1 \\sim N(\\mu, \\sigma)$ and $W_2 \\sim N(\\mu + \\mu, \\sigma + \\sigma)$. In the case
+Random walks are easily studied phenomena. Suppose we have a $W$ on $N(\\mu, \\sigma^2)$.
+$W_1 \\sim N(\\mu, \\sigma^2)$ and $W_2 \\sim N(\\mu + \\mu, \\sigma^2 + \\sigma^2)$. In the case
 $\\mu = 0, \\sigma = 1$ we have $W_2 \\sim N(0, 2)$. More generally, for any walk
-with a zero mean, $W_t \\sim N(0, t\\sigma)$.
+with a zero mean, $W_t \\sim N(0, t\\sigma^2)$.
 
 We can empiricize these results using the random number generator.
 
@@ -150,8 +150,7 @@ Shown below are boxplots of 1000 realizations of a 1001 step Gaussian walk
    :align: right
 
 The important realizations are that though the mean value of the walk is 0,
-the variance is unbounded. An unbounded variance is an undesirable property
-in time series analysis. In the next section we'll learn how to rectify this
+the variance is a function of time. In the next section we'll learn how to rectify this
 behavior in the random walk case.
 
 The code for the above plots is below.
@@ -228,6 +227,18 @@ A simple way to implement differencing in python is below.
                 x = np.cumsum(x)
             return x
 
+Ignoring numerical instabilities for higher powers, the following code prints
+True for any x of shape $(n,)$ for any power.
+
+.. code-block:: python
+
+    x = np.cumsum(np.random.normal(0, 1, 100))
+    model = difference(power=2)
+    diff_x = model.fit_transform(x)
+    undiff_diff_x = model.inv_transform(diff_x)
+    print(np.allclose(undiff_diff_x, x))
+
+
 The following code produces the above plot.
 
 .. code-block:: python
@@ -256,17 +267,6 @@ The following code produces the above plot.
         plt.grid()
         plt.title("Delta'd Walk")
         plt.show()
-
-Ignoring numerical instabilities for higher powers, the following code prints
-True for any x of shape $(n,)$ for any power.
-
-.. code-block:: python
-
-    x = np.cumsum(np.random.normal(0, 1, 100))
-    model = difference(power=2)
-    diff_x = model.fit_transform(x)
-    undiff_diff_x = model.inv_transform(diff_x)
-    print(np.allclose(undiff_diff_x, x))
 
 
 ###############
@@ -341,7 +341,7 @@ Adapted from the Statsmodels library is the following function.
 
     def autocorrelation_fast(x):
         assert(len(x.shape) == 1)
-        n = s[0]
+        n = x.shape[0]
         x -= x.mean()
         trans = np.fft.fft(x, n=n * 2)
         acf = np.fft.ifft(trans * np.conjugate(trans))[:l]
@@ -381,7 +381,7 @@ The code used to produce the plots in the above section.
         # Plot autocorrelation of both
         plt.plot(autocorrelation_fast(x_auto), 'k')
         plt.xlabel("Lag")
-        plt.ylabel("Autocorrelation Probability")
+        plt.ylabel("Correlation")
         plt.grid()
         plt.xlim(-1, 40)
         plt.ylim(-1.1, 1.1)
@@ -389,7 +389,7 @@ The code used to produce the plots in the above section.
         plt.show()
         plt.plot(autocorrelation_fast(x_not), 'k')
         plt.xlabel("Lag")
-        plt.ylabel("Autocorrelation Probability")
+        plt.ylabel("Correlation")
         plt.grid()
         plt.xlim(-1, 40)
         plt.ylim(-1.1, 1.1)
